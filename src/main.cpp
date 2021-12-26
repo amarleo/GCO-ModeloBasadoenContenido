@@ -60,8 +60,20 @@ vector<vector<string>> readFile(string filename) {
 
 int main(int argc, char** argv){
 
-   
-
-
-
+  int counter = 0;
+  vector<string> filenames;
+  cout << "argc = " << argc << " argv = " << argv[2];
+  for (int i = 0; i < argc; i++) {
+    string aux = argv[i];
+    int iterator = i;
+    if ((aux == "-f") || (aux == "--file")) {
+      iterator += 1;
+      while (counter < argc - i - 1) {
+        string str(argv[iterator]);
+        filenames.push_back(str);
+        counter++;
+        iterator++;
+      } 
+    }
+  }
 }
