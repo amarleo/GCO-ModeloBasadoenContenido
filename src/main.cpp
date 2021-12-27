@@ -47,8 +47,8 @@ void readFile(string filename, vector<string> &norepeated_words, vector<string> 
 vector<unsigned int> wordFrequency(vector<string> norepeated_words, vector<string> original_words) {
   vector<unsigned int> word_frequencies;
   unsigned int counter = 0;
-  for (int i = 0; i < norepeated_words.size(); i++) {
-    for (int j = 0; j < original_words.size(); j++) {
+  for (long unsigned int i = 0; i < norepeated_words.size(); i++) {
+    for (long unsigned int j = 0; j < original_words.size(); j++) {
       if (norepeated_words[i] == original_words[j]) {
         counter++;
       }
@@ -57,6 +57,13 @@ vector<unsigned int> wordFrequency(vector<string> norepeated_words, vector<strin
     counter = 0;
   }
   return word_frequencies;
+}
+
+void printTable(vector<string> norepeated_words, vector<unsigned int> word_frequencies) {
+  
+  for (unsigned int i = 0; i < word_frequencies.size(); i++) {
+    cout << i+1 << ". " << norepeated_words[i] << " " << word_frequencies[i] << endl;
+  }
 }
 
 int main(int argc, char** argv){
@@ -80,12 +87,10 @@ int main(int argc, char** argv){
   vector<string> norepeated_words, original_words;
   vector<unsigned int> word_frequencies;
   for (long unsigned int i = 0; i < filenames.size(); i++) {
-    cout << filenames[i];
+    //cout << filenames[i];
     readFile(filenames[i], norepeated_words, original_words);
     word_frequencies = wordFrequency(norepeated_words, original_words);
-    for (unsigned int j = 0; j < word_frequencies.size(); j++) {
-    cout << norepeated_words[j] << " " << word_frequencies[j] << endl;
-    }
+    printTable(norepeated_words, word_frequencies);
     
   }
   
