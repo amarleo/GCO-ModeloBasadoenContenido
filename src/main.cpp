@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
+#include <math.h>
 #include <algorithm>
 
 using namespace std;
@@ -90,8 +91,8 @@ void IDF(vector<vector<string>> files_words, vector<vector<unsigned int>> files_
   string word;
   unsigned int counter = 0;
   bool flag = false;
-  vector<vector<unsigned int>> v_idf;
-  v_idf.resize(files_words.size(), vector<unsigned int>(maxCols(files_words)));
+  vector<vector<double>> v_idf;
+  v_idf.resize(files_words.size(), vector<double>(maxCols(files_words)));
   cout << v_idf.size() << " " << v_idf[1].size();
   for (unsigned int i = 0; i < files_words.size(); i++) {    
     for (unsigned int j = 0; j < files_words[i].size(); j++) {
@@ -100,7 +101,7 @@ void IDF(vector<vector<string>> files_words, vector<vector<unsigned int>> files_
       for (unsigned int k = 0; k < v_idf.size(); k++) {
         auto finder = find(files_words[k].begin(), files_words[k].end(), word);
         if (files_words[k].end() != finder) {
-          cout << "Se ha encontrado la palabra " << word <<  " en la línea: " << k << " y columna: " << finder-files_words[k].begin() << "\n";
+          //cout << "Se ha encontrado la palabra " << word <<  " en la línea: " << k << " y columna: " << finder-files_words[k].begin() << "\n";
           counter += 1;
         }
       }
@@ -109,10 +110,11 @@ void IDF(vector<vector<string>> files_words, vector<vector<unsigned int>> files_
     }
   }
 
-
   for(unsigned int i = 0; i < v_idf.size(); i++) {
     for(long unsigned int j = 0; j < v_idf[i].size(); j++) {
       if (files_words[i][j].empty() == false)  {
+        float result = static_cast<float>(v_idf.size()) / v_idf[i][j];
+        v_idf[i][j] = log10(result);
         cout << files_words[i][j] << ": " << v_idf[i][j] << " ";
       }
     }
