@@ -7,6 +7,7 @@
 #include <cmath>
 #include <math.h>
 #include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
@@ -44,12 +45,12 @@ vector<vector<string>> copyMatrix(vector<vector<string>> v1, vector<vector<strin
     }
   }
 
-  for (unsigned int i = 0; i < v1.size(); i++) {
-    for (unsigned int j = 0; j < v1[i].size(); j++) {
-      cout << v2[i][j] << " ";
-    }
-    cout << endl;
-  }
+  // for (unsigned int i = 0; i < v1.size(); i++) {
+  //   for (unsigned int j = 0; j < v1[i].size(); j++) {
+  //     cout << v2[i][j] << " ";
+  //   }
+  //   cout << endl;
+  // }
 
   return v2;
 }
@@ -87,13 +88,12 @@ vector<unsigned int> wordFrequency(vector<string> norepeated_words, vector<strin
   return word_frequencies;
 }
 
-void IDF(vector<vector<string>> files_words, vector<vector<unsigned int>> files_frequency) {
+vector<vector<double>> IDF(vector<vector<string>> files_words) {
   string word;
   unsigned int counter = 0;
-  bool flag = false;
   vector<vector<double>> v_idf;
   v_idf.resize(files_words.size(), vector<double>(maxCols(files_words)));
-  cout << v_idf.size() << " " << v_idf[1].size();
+  //cout << v_idf.size() << " " << v_idf[1].size();
   for (unsigned int i = 0; i < files_words.size(); i++) {    
     for (unsigned int j = 0; j < files_words[i].size(); j++) {
       word = files_words[i][j];
@@ -115,11 +115,33 @@ void IDF(vector<vector<string>> files_words, vector<vector<unsigned int>> files_
       if (files_words[i][j].empty() == false)  {
         float result = static_cast<float>(v_idf.size()) / v_idf[i][j];
         v_idf[i][j] = log10(result);
-        cout << files_words[i][j] << ": " << v_idf[i][j] << " ";
+        //cout << files_words[i][j] << ": " << v_idf[i][j] << " ";
       }
     }
     cout << "\n";
   }
+  return v_idf;
+}
+
+void printMatrixTable(vector<vector<string>> files_words, vector<vector<unsigned int>> files_frequency,
+                      vector<vector<double>> idf) {
+
+  for(unsigned int i = 0; i < files_words.size(); i++) {
+    cout << "\t- - - File number " << i+1 << " - - -\nIndex\tTerm\t\tTF\t\tIDF\t\tTF-IDF\n";
+    for(long unsigned int j = 0; j < files_words[i].size(); j++) {
+      if (files_words[i][j].empty() == false)  {
+        cout << j << ".\t";
+        if (files_words[i][j].size() > 7) {
+          cout << files_words[i][j] << "\t" << files_frequency[i][j] << "\t\t";
+        } else {
+          cout << files_words[i][j] << "\t\t" << files_frequency[i][j] << "\t\t"; 
+        }
+        cout << setprecision(5) << idf[i][j] << "\t\t" << files_frequency[i][j] * idf[i][j] << "\n";
+      }
+    }
+  cout << "\n";
+  }
+  
 }
 
 void printTable(vector<string> norepeated_words, vector<unsigned int> word_frequencies) {
@@ -149,6 +171,7 @@ int main(int argc, char** argv){
   }
   vector<vector<string>> files_words, aux;
   vector<vector<unsigned int>> files_frequency;
+  vector<vector<double>> idf;
   vector<string> norepeated_words, original_words;
   vector<unsigned int> word_frequencies;
   for (long unsigned int i = 0; i < filenames.size(); i++) {
@@ -164,6 +187,7 @@ int main(int argc, char** argv){
   }
   files_words.resize(aux.size(), vector<string>(maxCols(aux)));
   files_words = copyMatrix(aux, files_words); 
-  cout << files_words.size() << " " << files_words[1].size() << endl;
-  IDF (files_words, files_frequency);
+  //cout << files_words.size() << " " << files_words[1].size() << endl;
+  idf = IDF (files_words);
+  printMatrixTable(files_words, files_frequency, idf);
 }
