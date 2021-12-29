@@ -13,6 +13,9 @@ EXT = .cpp
 SRCDIR = src
 OBJDIR = bin
 TESTDIR = test
+CSVDIR = csv
+
+CSV = $(CSV:$(CSVDIR)/*)
 
 ############## Do not change anything from here downwards! #############
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
@@ -59,3 +62,4 @@ $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
 .PHONY: clean
 clean:
 	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
+	rm csv/*.csv 

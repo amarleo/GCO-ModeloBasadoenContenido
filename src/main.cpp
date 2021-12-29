@@ -44,15 +44,11 @@ vector<vector<string>> copyMatrix(vector<vector<string>> v1, vector<vector<strin
       v2[i][j] = v1[i][j];
     }
   }
-
-  // for (unsigned int i = 0; i < v1.size(); i++) {
-  //   for (unsigned int j = 0; j < v1[i].size(); j++) {
-  //     cout << v2[i][j] << " ";
-  //   }
-  //   cout << endl;
-  // }
-
   return v2;
+}
+
+int fileError() {
+  return -1;
 }
 
 void readFile(string filename, vector<string> &norepeated_words, vector<string> &original_words) {
@@ -62,6 +58,9 @@ void readFile(string filename, vector<string> &norepeated_words, vector<string> 
   string word;
   
   ifstream file(source);
+  if (!file) {
+    cerr << "ERROR: el nombre del fichero " << filename << " es erróneo o no se ha podido abrir.";
+  }
   while (file >> word) {
     word = removePunctuation(word);
     transform(word.begin(), word.end(), word.begin(), ::tolower);
@@ -93,7 +92,6 @@ vector<vector<double>> IDF(vector<vector<string>> files_words) {
   unsigned int counter = 0;
   vector<vector<double>> v_idf;
   v_idf.resize(files_words.size(), vector<double>(maxCols(files_words)));
-  //cout << v_idf.size() << " " << v_idf[1].size();
   for (unsigned int i = 0; i < files_words.size(); i++) {    
     for (unsigned int j = 0; j < files_words[i].size(); j++) {
       word = files_words[i][j];
@@ -101,12 +99,10 @@ vector<vector<double>> IDF(vector<vector<string>> files_words) {
       for (unsigned int k = 0; k < v_idf.size(); k++) {
         auto finder = find(files_words[k].begin(), files_words[k].end(), word);
         if (files_words[k].end() != finder) {
-          //cout << "Se ha encontrado la palabra " << word <<  " en la línea: " << k << " y columna: " << finder-files_words[k].begin() << "\n";
           counter += 1;
         }
       }
       v_idf[i][j] = counter;
-      //cout << "HA TERMINADO LA ITERACION CON COLUMNA " << j << " Y FILA " << i << endl;
     }
   }
 
@@ -115,7 +111,6 @@ vector<vector<double>> IDF(vector<vector<string>> files_words) {
       if (files_words[i][j].empty() == false)  {
         float result = static_cast<float>(v_idf.size()) / v_idf[i][j];
         v_idf[i][j] = log10(result);
-        //cout << files_words[i][j] << ": " << v_idf[i][j] << " ";
       }
     }
     cout << "\n";
@@ -144,18 +139,38 @@ void printMatrixTable(vector<vector<string>> files_words, vector<vector<unsigned
   
 }
 
-void printTable(vector<string> norepeated_words, vector<unsigned int> word_frequencies) {
+void csvMode(vector<vector<string>> files_words, vector<vector<unsigned int>> files_frequency,
+            vector<vector<double>> idf, vector<string> filenames) {
+  fstream fout; 
+  string file;
   
-  for (unsigned int i = 0; i < word_frequencies.size(); i++) {
-    cout << i+1 << ". " << norepeated_words[i] << " " << word_frequencies[i] << endl;
-  }
+    for(unsigned int i = 0; i < files_words.size(); i++) {
+      fout.open("./csv/" + filenames[i] + ".csv", ios::out);
+      if(fout) {
+      fout << "Index,Term,Tf,IDF,TF_IDF\n";
+      for(long unsigned int j = 0; j < files_words[i].size(); j++) {
+          if (files_words[i][j].empty() == false)  {
+            fout << j << "," << files_words[i][j] << "," << files_frequency[i][j] << "," 
+                << setprecision(5) << idf[i][j] << "," << setprecision(5) <<  files_frequency[i][j] * idf[i][j] << "\n";
+          }
+        }
+      }
+      fout.close();
+    }
+  
+  
 }
 
 int main(int argc, char** argv){
 
   int counter = 0;
-  vector<string> filenames;
-  //cout << "argc = " << argc << " argv = " << argv[2];
+  bool csv = false;
+  vector<string> filenames, norepeated_words, original_words;
+  vector<unsigned int> word_frequencies;
+  vector<vector<string>> files_words, aux;
+  vector<vector<unsigned int>> files_frequency;
+  vector<vector<double>> idf;
+  
   for (int i = 0; i < argc; i++) {
     string aux = argv[i];
     int iterator = i;
@@ -163,22 +178,20 @@ int main(int argc, char** argv){
       iterator += 1;
       while (counter < argc - i - 1) {
         string str(argv[iterator]);
+        if (str[0] == '-') break;
         filenames.push_back(str);
         counter++;
         iterator++;
       } 
     }
+    if ((aux == "-c") || (aux == "--csv")) {
+      csv = true;
+    }
   }
-  vector<vector<string>> files_words, aux;
-  vector<vector<unsigned int>> files_frequency;
-  vector<vector<double>> idf;
-  vector<string> norepeated_words, original_words;
-  vector<unsigned int> word_frequencies;
+
   for (long unsigned int i = 0; i < filenames.size(); i++) {
-    //cout << filenames[i];
     readFile(filenames[i], norepeated_words, original_words);
     word_frequencies = wordFrequency(norepeated_words, original_words);
-    //printTable(norepeated_words, word_frequencies);
     aux.push_back(norepeated_words);
     files_frequency.push_back(word_frequencies);
     norepeated_words.clear();
@@ -187,7 +200,11 @@ int main(int argc, char** argv){
   }
   files_words.resize(aux.size(), vector<string>(maxCols(aux)));
   files_words = copyMatrix(aux, files_words); 
-  //cout << files_words.size() << " " << files_words[1].size() << endl;
   idf = IDF (files_words);
   printMatrixTable(files_words, files_frequency, idf);
+
+  if (csv == true) {
+    csvMode(files_words, files_frequency, idf, filenames);
+    cout << "CSV file created succesfully";
+  }
 }
