@@ -92,11 +92,20 @@ void IDF(vector<vector<string>> files_words, vector<vector<unsigned int>> files_
   bool flag = false;
   vector<vector<unsigned int>> v_idf;
   v_idf.resize(files_words.size(), vector<unsigned int>(maxCols(files_words)));
-  //cout << v_idf.size() << " " << v_idf[1].size();
-  for (unsigned int i = 0; i < v_idf.size(); i++) {
-    auto word = find(files_words[i].begin(), files_words[i].end(), "hola");
-    if (files_words[i].end() != word) {
-      cout << "Se ha encontrado en la línea: " << i << " y columna: " << word-files_words[i].begin() << "\n";
+  cout << v_idf.size() << " " << v_idf[1].size();
+  for (unsigned int i = 0; i < files_words.size(); i++) {    
+    for (unsigned int j = 0; j < files_words[i].size(); j++) {
+      word = files_words[i][j];
+      counter = 0;
+      for (unsigned int k = 0; k < v_idf.size(); k++) {
+        auto finder = find(files_words[k].begin(), files_words[k].end(), word);
+        if (files_words[k].end() != finder) {
+          cout << "Se ha encontrado la palabra " << word <<  " en la línea: " << k << " y columna: " << finder-files_words[k].begin() << "\n";
+          counter += 1;
+        }
+      }
+      v_idf[i][j] = counter;
+      //cout << "HA TERMINADO LA ITERACION CON COLUMNA " << j << " Y FILA " << i << endl;
     }
   }
 
