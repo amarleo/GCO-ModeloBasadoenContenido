@@ -187,7 +187,7 @@ vector<vector<double>> normalizeVector(vector<vector<double>> idf, vector<double
   return normalizedMatrix;
 }
 
-void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size) {
+void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size, vector<vector<string>> files_words) {
   unsigned int aux = 1;
   double result = 0;
   int counter = 0;
@@ -196,8 +196,12 @@ void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size) {
     aux = i+1;
     while (aux < size) {
         result = 0;
-        for (unsigned int k = 0; k < normalizedMatrix[0].size(); k++) {
-          result = result + (normalizedMatrix[i][k] * normalizedMatrix[aux][k]);
+        for (unsigned int j = 0; j < normalizedMatrix[0].size(); j++) {
+          for (unsigned int k = 0; k < normalizedMatrix[0].size(); k++) {
+            if ((files_words[i][j] == (files_words[aux][k]) && (files_words[i][j].empty() == false))) {
+              result = result + (normalizedMatrix[i][j] * normalizedMatrix[aux][k]);
+            }
+          }
         }
       cout << "cos(A" << i << ", A" << aux << ") = " << setprecision(5) << result << endl;
       cosine_values.push_back(result);
@@ -285,7 +289,7 @@ int main(int argc, char** argv){
 
   vector_length = vectorLength(idf);
   normalized_matrix = normalizeVector(idf, vector_length);
-  cosineValues(normalized_matrix, filenames.size());
+  cosineValues(normalized_matrix, filenames.size(),files_words);
 
 
   if (csv == true) {
