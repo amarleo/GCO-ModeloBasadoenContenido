@@ -8,6 +8,7 @@
 #include <math.h>
 #include <algorithm>
 #include <iomanip>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -59,7 +60,8 @@ void readFile(string filename, vector<string> &norepeated_words, vector<string> 
   
   ifstream file(source);
   if (!file) {
-    cerr << "ERROR: el nombre del fichero " << filename << " es erróneo o no se ha podido abrir.";
+    cerr << "\nERROR: file name '" << filename << "' does not exist or is not readable." << endl;
+    exit(1);
   }
   while (file >> word) {
     word = removePunctuation(word);
@@ -155,17 +157,27 @@ void csvMode(vector<vector<string>> files_words, vector<vector<unsigned int>> fi
           }
         }
       }
-      cout << "CSV file " << filenames[i] << ".csv created\n";
+      cout << "CSV file '" << filenames[i] << ".csv' created\n";
       fout.close();
     }
   
   
 }
 
+void help() {
+  cout << "\nContent-based Filtering\nThis app filters files data and find out the similarity between all introduced txt files. Then, it prints the results on terminal and/or on a csv file\n"
+      << "\nTo compile: 'make' or 'g++ -g src/main -o app_name'"
+      << "\nusage: app_name [options] input1 input2 (...)"
+      << "\n\t-f, --file: One or more file inputs could be placed before this option."
+      << "Important: Only the files between this option and another will be redeabled."
+      << "\n\t-c, --csv: This option puts the output of the app into an .csv file at the csv directory."
+      << "\n\t-h, --help: Prints help table." << endl;
+}
+
 int main(int argc, char** argv){
 
   int counter = 0;
-  bool csv = false;
+  bool csv = false, flag = false;
   vector<string> filenames, norepeated_words, original_words;
   vector<unsigned int> word_frequencies;
   vector<vector<string>> files_words, aux;
@@ -176,6 +188,7 @@ int main(int argc, char** argv){
     string aux = argv[i];
     int iterator = i;
     if ((aux == "-f") || (aux == "--file")) {
+      flag = true; 
       iterator += 1;
       while (counter < argc - i - 1) {
         string str(argv[iterator]);
@@ -183,14 +196,33 @@ int main(int argc, char** argv){
         filenames.push_back(str);
         counter++;
         iterator++;
-      } 
+      }
+      if (filenames.size() == 0) {
+        cout << "ERROR: There are no files specified by arguments. Check --help command";
+        help();
+        return -1;
+      }
     }
-    if ((aux == "-c") || (aux == "--csv")) {
+    else if ((aux == "-c") || (aux == "--csv")) {
       csv = true;
+      flag = false;
     }
-    // RECONFIGURAR MENÚ
-    if ((aux == "-h") || (aux == "--help")) {
-      cout << "AYUDA";
+    else if ((aux == "-h") || (aux == "--help")) {
+      help();
+      flag = false;
+      return 0;
+    }
+    else {
+      if (aux[0] == '-') {
+        cout << "\nERROR: Command " << aux << " does not exist. Please, enter valid command." << endl;
+        help();
+        return -1;
+      }
+      else if ((flag == false) && (aux != "./sist_recomendacion")) {
+        cout << "ERROR: Wrong file order, please follow the instructions below" << endl;
+        help();
+        return -1;
+      }
     }
   }
 
@@ -206,7 +238,7 @@ int main(int argc, char** argv){
   files_words.resize(aux.size(), vector<string>(maxCols(aux)));
   files_words = copyMatrix(aux, files_words); 
   idf = IDF (files_words);
-  printMatrixTable(files_words, files_frequency, idf);
+  //printMatrixTable(files_words, files_frequency, idf);
 
   if (csv == true) {
     csvMode(files_words, files_frequency, idf, filenames);
