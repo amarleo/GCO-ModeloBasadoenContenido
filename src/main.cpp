@@ -155,6 +155,7 @@ void csvMode(vector<vector<string>> files_words, vector<vector<unsigned int>> fi
           }
         }
       }
+      cout << "CSV file " << filenames[i] << ".csv created\n";
       fout.close();
     }
   
@@ -187,6 +188,10 @@ int main(int argc, char** argv){
     if ((aux == "-c") || (aux == "--csv")) {
       csv = true;
     }
+    // RECONFIGURAR MENÚ
+    if ((aux == "-h") || (aux == "--help")) {
+      cout << "AYUDA";
+    }
   }
 
   for (long unsigned int i = 0; i < filenames.size(); i++) {
@@ -205,6 +210,5 @@ int main(int argc, char** argv){
 
   if (csv == true) {
     csvMode(files_words, files_frequency, idf, filenames);
-    cout << "CSV file created succesfully";
   }
 }
