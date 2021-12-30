@@ -145,23 +145,65 @@ void csvMode(vector<vector<string>> files_words, vector<vector<unsigned int>> fi
             vector<vector<double>> idf, vector<string> filenames) {
   fstream fout; 
   string file;
-  
-    for(unsigned int i = 0; i < files_words.size(); i++) {
-      fout.open("./csv/" + filenames[i] + ".csv", ios::out);
-      if(fout) {
-      fout << "Index,Term,Tf,IDF,TF_IDF\n";
-      for(long unsigned int j = 0; j < files_words[i].size(); j++) {
-          if (files_words[i][j].empty() == false)  {
-            fout << j << "," << files_words[i][j] << "," << files_frequency[i][j] << "," 
-                << setprecision(5) << idf[i][j] << "," << setprecision(5) <<  files_frequency[i][j] * idf[i][j] << "\n";
-          }
+
+  for(unsigned int i = 0; i < files_words.size(); i++) {
+    fout.open("./csv/" + filenames[i] + ".csv", ios::out);
+    if(fout) {
+    fout << "Index,Term,Tf,IDF,TF_IDF\n";
+    for(long unsigned int j = 0; j < files_words[i].size(); j++) {
+        if (files_words[i][j].empty() == false)  {
+          fout << j << "," << files_words[i][j] << "," << files_frequency[i][j] << "," 
+              << setprecision(5) << idf[i][j] << "," << setprecision(5) <<  files_frequency[i][j] * idf[i][j] << "\n";
         }
       }
-      cout << "CSV file '" << filenames[i] << ".csv' created\n";
-      fout.close();
     }
-  
-  
+    cout << "CSV file '" << filenames[i] << ".csv' created\n";
+    fout.close();
+  }
+}
+
+vector<double> vectorLength(vector<vector<double>> idf) {
+  vector<double> idf_length;
+  double result = 0;
+  for (unsigned int i = 0; i < idf.size(); i++) {
+    result = 0;
+    for (unsigned int j = 0; j < idf[i].size(); j++) {
+      result = result + (pow(idf[i][j], 2));
+    }
+    result = sqrt(result);
+    idf_length.push_back(result);
+  }
+  return idf_length;
+}
+
+vector<vector<double>> normalizeVector(vector<vector<double>> idf, vector<double> idf_length) {
+  vector<vector<double>> normalizedMatrix;
+  normalizedMatrix.resize(idf.size(), vector<double>(idf[0].size()));
+  for (unsigned int i = 0; i < idf.size(); i++) {
+    for (unsigned int j = 0; j < idf[i].size(); j++) {
+      normalizedMatrix[i][j] = (idf[i][j] / idf_length[i]);
+    }
+  }
+  return normalizedMatrix;
+}
+
+void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size) {
+  unsigned int aux = 1;
+  double result = 0;
+  int counter = 0;
+  vector<double> cosine_values;
+  for (unsigned int i = 0; i < size; i++) {
+    aux = i+1;
+    while (aux < size) {
+        result = 0;
+        for (unsigned int k = 0; k < normalizedMatrix[0].size(); k++) {
+          result = result + (normalizedMatrix[i][k] * normalizedMatrix[aux][k]);
+        }
+      cout << "cos(A" << i << ", A" << aux << ") = " << setprecision(5) << result << endl;
+      cosine_values.push_back(result);
+      aux++;
+    }
+  }
 }
 
 void help() {
@@ -182,7 +224,8 @@ int main(int argc, char** argv){
   vector<unsigned int> word_frequencies;
   vector<vector<string>> files_words, aux;
   vector<vector<unsigned int>> files_frequency;
-  vector<vector<double>> idf;
+  vector<vector<double>> idf, normalized_matrix;
+  vector<double> vector_length;
   
   for (int i = 0; i < argc; i++) {
     string aux = argv[i];
@@ -238,7 +281,12 @@ int main(int argc, char** argv){
   files_words.resize(aux.size(), vector<string>(maxCols(aux)));
   files_words = copyMatrix(aux, files_words); 
   idf = IDF (files_words);
-  //printMatrixTable(files_words, files_frequency, idf);
+  printMatrixTable(files_words, files_frequency, idf);
+
+  vector_length = vectorLength(idf);
+  normalized_matrix = normalizeVector(idf, vector_length);
+  cosineValues(normalized_matrix, filenames.size());
+
 
   if (csv == true) {
     csvMode(files_words, files_frequency, idf, filenames);
