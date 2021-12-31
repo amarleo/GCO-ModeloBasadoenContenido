@@ -12,6 +12,7 @@
 
 using namespace std;
 
+// Método que comprueba si un vector contiene el string indicado por argumento. 
 bool isRepeated(vector<string> v, string str) {
   for (unsigned int i = 0; i < v.size(); i++) {
     if (v[i] == str) return true;
@@ -19,6 +20,7 @@ bool isRepeated(vector<string> v, string str) {
   return false;
 }
 
+// Dados un string, comprueba si hay signos de puntuacion y los elimina.
 string removePunctuation(string str) {
   for(int i = 0, len = str.size(); i < len; i++) {
     if (ispunct(str[i])) {
@@ -29,6 +31,7 @@ string removePunctuation(string str) {
   return str;
 }
 
+// Dada una matriz, devuelve el mayor tamaño de sus filas. 
 unsigned int maxCols(vector<vector<string>> v) {
   unsigned int max = 0;
   for (unsigned int i = 0; i < v.size(); i++) {
@@ -39,6 +42,7 @@ unsigned int maxCols(vector<vector<string>> v) {
   return max;
 }
 
+// Método que copia una matriz en otra.
 vector<vector<string>> copyMatrix(vector<vector<string>> v1, vector<vector<string>> v2) {
   for (unsigned int i = 0; i < v1.size(); i++) {
     for (unsigned int j = 0; j < v1[i].size(); j++) {
@@ -48,10 +52,7 @@ vector<vector<string>> copyMatrix(vector<vector<string>> v1, vector<vector<strin
   return v2;
 }
 
-int fileError() {
-  return -1;
-}
-
+// Método que lee los ficheros situados en /files
 void readFile(string filename, vector<string> &norepeated_words, vector<string> &original_words) {
 
   string lines;
@@ -74,6 +75,7 @@ void readFile(string filename, vector<string> &norepeated_words, vector<string> 
   file.close();
 }
 
+// Método que devuelve un vector con el número de repeticiones por cada palabra de un fichero
 vector<unsigned int> wordFrequency(vector<string> norepeated_words, vector<string> original_words) {
   vector<unsigned int> word_frequencies;
   unsigned int counter = 0;
@@ -89,6 +91,7 @@ vector<unsigned int> wordFrequency(vector<string> norepeated_words, vector<strin
   return word_frequencies;
 }
 
+// Método que calcula el IDF
 vector<vector<double>> IDF(vector<vector<string>> files_words) {
   string word;
   unsigned int counter = 0;
@@ -120,6 +123,7 @@ vector<vector<double>> IDF(vector<vector<string>> files_words) {
   return v_idf;
 }
 
+// Método que imprime la tabla resultado
 void printMatrixTable(vector<vector<string>> files_words, vector<vector<unsigned int>> files_frequency,
                       vector<vector<double>> idf) {
 
@@ -137,10 +141,10 @@ void printMatrixTable(vector<vector<string>> files_words, vector<vector<unsigned
       }
     }
   cout << "\n";
-  }
-  
+  } 
 }
 
+// Método que crea y rellena los ficheros CSV
 void csvMode(vector<vector<string>> files_words, vector<vector<unsigned int>> files_frequency,
             vector<vector<double>> idf, vector<string> filenames) {
   fstream fout; 
@@ -162,6 +166,7 @@ void csvMode(vector<vector<string>> files_words, vector<vector<unsigned int>> fi
   }
 }
 
+// Método que calcula la longitud del vector
 vector<double> vectorLength(vector<vector<double>> idf) {
   vector<double> idf_length;
   double result = 0;
@@ -176,6 +181,7 @@ vector<double> vectorLength(vector<vector<double>> idf) {
   return idf_length;
 }
 
+// Método que normaliza el Vector
 vector<vector<double>> normalizeVector(vector<vector<double>> idf, vector<double> idf_length) {
   vector<vector<double>> normalizedMatrix;
   normalizedMatrix.resize(idf.size(), vector<double>(idf[0].size()));
@@ -187,6 +193,7 @@ vector<vector<double>> normalizeVector(vector<vector<double>> idf, vector<double
   return normalizedMatrix;
 }
 
+// Método que reliza la similitud coseno de entre todos los ficheros.
 void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size, vector<vector<string>> files_words) {
   unsigned int aux = 1;
   double result = 0;
@@ -209,6 +216,7 @@ void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size, ve
   }
 }
 
+// Metodo ayuda
 void help() {
   cout << "\nContent-based Filtering\nThis app filters files data and find out the similarity between all introduced txt files. Then, it prints the results on terminal and/or on a csv file\n"
       << "\nTo compile: 'make' or 'g++ -g src/main -o app_name'"
@@ -219,6 +227,7 @@ void help() {
       << "\n\t-h, --help: Prints help table." << endl;
 }
 
+// Programa principal
 int main(int argc, char** argv){
 
   int counter = 0;
