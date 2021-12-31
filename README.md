@@ -287,9 +287,9 @@ Posteriormente, se procederá a ejecutar el programa. Para ello, es necesario pa
     ./sist_recomendacion --file doc1.txt doc2.txt -c
     ```
 
-- **-c** ó **--csv**: Este comando permitirá la salida de datos a través de documentos csv que se generarán dentro del directorio /csv. Si los ficheros existían con anterioridad, serán sobreescritos.
+- **-c** ó **--csv**: (Opcional) Este comando permitirá la salida de datos a través de documentos csv que se generarán dentro del directorio /csv. Si los ficheros existían con anterioridad, serán sobreescritos.
 
-- **-h** ó **--help**: Este comando muestra la ayuda. Se muestra a continuación un ejemplo de su uso: 
+- **-h** ó **--help**: (Opcional) Este comando muestra la ayuda. Se muestra a continuación un ejemplo de su uso: 
 
 ```shell
 ale@pc:~/Documentos/ULL2122/GCO/GCO-ModeloBasadoenContenido(master)$ ./sist_recomendacion --help
