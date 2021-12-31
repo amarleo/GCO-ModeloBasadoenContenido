@@ -12,11 +12,16 @@
 4. [Ejecución y uso del programa](#ejecución-y-uso-del-programa)  
 5. [Análisis](#análisis)
 
+***
 ## Introducción
+***
 
 Este informe tiene como objetivo detallar el código que ha sido elaborado, así como de realizar un pequeño análisis de los datos obtenido tras los ejemplos propuestos.
 
+***
 ## Estructura del repositorio
+***
+
 El repositorio se compone en los siguientes directorios: 
 
 ```
@@ -49,8 +54,9 @@ Con el objetivo de comprender mejor cada uno de los directorios, se procede a re
 - **makefile**: Al ejecutar la orden "make", se encarga de compilar todo el programa principal.
 - **sist_recomendacion**: Es el ejecutable creado tras compilar el programa.
 
-
+***
 ## Detalles sobre el código
+***
 
 Principalmente se ha creado el programa sobre un única fuente de código, concretamente situado en el directorio src nombrado como main.cpp.
 
@@ -246,7 +252,9 @@ El resto de funciones que se encuentran en el código son pequeñas funcionalida
 ## Ejecución y uso del programa
 ***
 
+***
 ### Compilación
+***
 
 En primer lugar, para compilar el programa será necesario seguir cualquiera de las dos siguientes opciones: 
 
@@ -259,7 +267,9 @@ En primer lugar, para compilar el programa será necesario seguir cualquiera de 
 - Ejecutar la siguiente línea: 
     >g++ -g src/main.cpp -o sist_recomendacion
 
+***
 ### Ejecución
+***
 
 Posteriormente, se procederá a ejecutar el programa. Para ello, es necesario pasarle unos argumentos:
 
