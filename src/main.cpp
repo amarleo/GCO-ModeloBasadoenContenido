@@ -190,7 +190,6 @@ vector<vector<double>> normalizeVector(vector<vector<double>> idf, vector<double
 void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size, vector<vector<string>> files_words) {
   unsigned int aux = 1;
   double result = 0;
-  int counter = 0;
   vector<double> cosine_values;
   for (unsigned int i = 0; i < size; i++) {
     aux = i+1;
