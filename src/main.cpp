@@ -221,7 +221,7 @@ void help() {
   cout << "\nContent-based Filtering\nThis app filters files data and find out the similarity between all introduced txt files. Then, it prints the results on terminal and/or on a csv file\n"
       << "\nTo compile: 'make' or 'g++ -g src/main -o app_name'"
       << "\nusage: app_name [options] input1 input2 (...)"
-      << "\n\t-f, --file: One or more file inputs could be placed before this option."
+      << "\n\t-f, --file: One or more file inputs could be placed before this option. "
       << "Important: Only the files between this option and another will be redeabled."
       << "\n\t-c, --csv: This option puts the output of the app into an .csv file at the csv directory."
       << "\n\t-h, --help: Prints help table." << endl;

@@ -9,17 +9,8 @@
 1. [Introducción](#introducción)  
 2. [Estructura del repositorio](#estructura-del-repositorio)
 3. [Detalles sobre el código](#detalles-sobre-el-código)
-4. [Páginas que componen principalmente la web](#páginas-que-componen-principalmente-la-web)  
-    4.1. [Index (login)](#index-login)  
-    4.2. [Sign in](#sign-in)  
-    4.3. [Home](#home)  
-    4.4. [Menú desplegable](#menú-desplegable)  
-    4.5. [Perfil de usuario](#perfil-de-usuario)  
-    4.6. [Página de reciclado](#página-de-reciclado)  
-    4.7. [Página de actividades](#página-de-actividades)  
-    &nbsp;&nbsp;&nbsp;4.7.1. [Actividad Trail](#actividad-trail)  
-    4.8. [Tienda de intercambio de puntos](#tienda-de-intercambios)  
-
+4. [Ejecución y uso del programa](#ejecución-y-uso-del-programa)  
+5. [Análisis](#análisis)
 
 ## Introducción
 
@@ -249,3 +240,76 @@ void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size, ve
 Como se puede observar, se realiza una comprobación de que ambas palabras sean la misma y si y sólo si eso se cumple, se realiza la operación de IDF asociada a esa palabra en cada documento. 
 
 El resto de funciones que se encuentran en el código son pequeñas funcionalidades que tienen como objetivo mejorar el programa para se ejecute de forma óptima y correcta, pero se considera que su explicación queda lo suficientemente detallada en los propios comentarios que las describen en el programa main.cpp situado dentro del directorio /src.
+
+
+***
+## Ejecución y uso del programa
+***
+
+### Compilación
+
+En primer lugar, para compilar el programa será necesario seguir cualquiera de las dos siguientes opciones: 
+
+- Hacer uso del programa **make**: 
+    > make
+
+    O para eliminar los ficheros csv y de ejecución: 
+    > make clean
+
+- Ejecutar la siguiente línea: 
+    >g++ -g src/main.cpp -o sist_recomendacion
+
+### Ejecución
+
+Posteriormente, se procederá a ejecutar el programa. Para ello, es necesario pasarle unos argumentos:
+
+- **-f** ó **--file** [arg1] [arg2] [...]: Este comando permitirá establecer todos los ficheros que se han de querer referenciar para la ejecución del programa. Obligatoriamente será necesario que éstos estén situados dentro del directorio /files. Es importante colocar todos los ficheros seguidos de este comando y antes de usar cualquier otro comando, ya que produciría un error. A continuación se muestra dos ejemplos de usos:
+
+    Uso erróneo:
+
+    ./sist_recomendacion doc1.txt --file doc2.txt
+
+    Uso correcto: 
+
+    ./sist_recomendacion --file doc1.txt doc2.txt -c
+
+- **-c** ó **--csv**: Este comando permitirá la salida de datos a través de documentos csv que se generarán dentro del directorio /csv. Si los ficheros existían con anterioridad, serán sobreescritos.
+
+- **-h** ó **--help**: Este comando muestra la ayuda. Se muestra a continuación un ejemplo de su uso: 
+
+```shell
+ale@pc:~/Documentos/ULL2122/GCO/GCO-ModeloBasadoenContenido(master)$ ./sist_recomendacion --help
+
+Content-based Filtering
+This app filters files data and find out the similarity between all introduced txt files. Then, it prints the results on terminal and/or on a csv file
+
+To compile: 'make' or 'g++ -g src/main -o app_name'
+usage: app_name [options] input1 input2 (...)
+	-f, --file: One or more file inputs could be placed before this option.Important: Only the files between this option and another will be redeabled.
+	-c, --csv: This option puts the output of the app into an .csv file at the csv directory.
+	-h, --help: Prints help table.
+
+```
+
+Un ejemplo de ejecución del programa sería el siguiente:
+
+```
+./sist_recomendacion --file file-01.txt file-02.txt file-03.txt --csv
+```
+Con la sentencia anterior se ejecutará el programa para esos tres ficheros y además se imprimirá la salida tanto por los ficheros csv como por la terminal.
+
+***
+## Análisis
+***
+
+Dado los ficheros proporcionados en el siguiente [enlace](https://github.com/cexposit/ull-gco/tree/main/examples-documents) se va a realiar un breve análisis sobre los datos resultantes del programa. Tras realizar la ejecución y observar los datos almacenados en los csv, se puede apreciar que realmente son pocas las palabras que generan una repetición con el resto de documentos. Incluso para un mismo documento, se tratan de pocas las palabras que superan 2 o 3 repeticiones. Normalmente se tratan de conectores, palabras clave o determinantes y preposiciones.
+Es por esto, por lo que se espera que la similitud de entre los diferentes documentos sea realmente no demasiado elevada, debido que son más bien poca las palabras que coinciden.
+Tras realizar la ejecución del programa, al final de la terminal obtenemos las siguientes similitudes coseno: 
+
+```
+cos(A0, A1) = 0.0016757
+cos(A0, A2) = 0.0066367
+cos(A1, A2) = 0.0068222
+```
+
+Como se puede observar, a penas se parecen los diferentes documentos, ya que el número que se obtiene se aleja bastante de lo que sería una similitud exacta. Se observa además que la pareja de documentos que más se asemejan son la del "file-02.txt" y "file-03.txt".
