@@ -276,12 +276,16 @@ Posteriormente, se procederá a ejecutar el programa. Para ello, es necesario pa
 - **-f** ó **--file** [arg1] [arg2] [...]: Este comando permitirá establecer todos los ficheros que se han de querer referenciar para la ejecución del programa. Obligatoriamente será necesario que éstos estén situados dentro del directorio /files. Es importante colocar todos los ficheros seguidos de este comando y antes de usar cualquier otro comando, ya que produciría un error. A continuación se muestra dos ejemplos de usos:
 
     Uso erróneo:
+    ```
 
     ./sist_recomendacion doc1.txt --file doc2.txt
+    ```
 
     Uso correcto: 
 
+    ```
     ./sist_recomendacion --file doc1.txt doc2.txt -c
+    ```
 
 - **-c** ó **--csv**: Este comando permitirá la salida de datos a través de documentos csv que se generarán dentro del directorio /csv. Si los ficheros existían con anterioridad, serán sobreescritos.
 
@@ -323,3 +327,5 @@ cos(A1, A2) = 0.0068222
 ```
 
 Como se puede observar, a penas se parecen los diferentes documentos, ya que el número que se obtiene se aleja bastante de lo que sería una similitud exacta. Se observa además que la pareja de documentos que más se asemejan son la del "file-02.txt" y "file-03.txt".
+
+[Volver al Inicio](#Índice)
