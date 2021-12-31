@@ -142,10 +142,9 @@ vector<vector<double>> IDF(vector<vector<string>> files_words) {
 ```
 
 Finalmente, se realizan dos bucles adicionales, sobre los que se realizará la operación que determinará el valor idf para cada término. La operación es la siguiente: 
-
-<div class = "img-container">
+<p align="center">
 <img src="https://latex.codecogs.com/svg.image?IDF(x)&space;=&space;log&space;{&space;N&space;\over&space;dfx}" title="IDF(x) = log { N \over dfx}" />
-</div>
+</p>
 
 Donde **N** es el número de todos los documentos que pueden ser recomendados y **dfx** el números de documentos en los que la palabra elegida aparece.
 
