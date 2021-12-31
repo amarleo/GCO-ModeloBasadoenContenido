@@ -143,7 +143,9 @@ vector<vector<double>> IDF(vector<vector<string>> files_words) {
 
 Finalmente, se realizan dos bucles adicionales, sobre los que se realizará la operación que determinará el valor idf para cada término. La operación es la siguiente: 
 
-> IDF(x) = log (N / dfx)
+<div class = "img-container">
+<img src="https://latex.codecogs.com/svg.image?IDF(x)&space;=&space;log&space;{&space;N&space;\over&space;dfx}" title="IDF(x) = log { N \over dfx}" />
+</div>
 
 Donde **N** es el número de todos los documentos que pueden ser recomendados y **dfx** el números de documentos en los que la palabra elegida aparece.
 
@@ -164,7 +166,10 @@ Donde **N** es el número de todos los documentos que pueden ser recomendados y 
 
 - **Funciones para calcular la Similaridad Coseno:** Para conseguir este cometido, se ha estructurado el programa en tres funciones diferentes. En primer lugar, como primer paso se necesita realizar la longitud de cada uno de los vectores asociado a cada uno de los documentos. La operación es: 
 
-> $$ vectorLenth = \sqrt{word_1^2 + word_2^2 + word_3^2 + ... + word_n^2} $$
+<div class = "img-container">
+<img src="https://latex.codecogs.com/svg.image?vectorLenth&space;=&space;\sqrt{word_1^2&space;&plus;&space;word_2^2&space;&plus;&space;word_3^2&space;&plus;&space;...&space;&plus;&space;word_n^2}&space;" title="vectorLenth = \sqrt{word_1^2 + word_2^2 + word_3^2 + ... + word_n^2}"/>
+</div>
+
 
 Esta operación se ha de realizar por cada una de las líneas de la matriz de palabras, es decir, por cada documento. El resultado será almacenado en un vector.
 
@@ -186,7 +191,10 @@ vector<double> vectorLength(vector<vector<double>> idf) {
 
 Otra de las operaciones previas a realizar es lo que se conoce como la normalización del vector. Esto no es más que, la división de cada uno de los valores IDF de cada termino entre la longitud del vector del documento, es decir: 
 
-> $$ normalized = {IDF(word_x)_y \over vectorLenth_y} $$ 
+<div class = "img-container">
+<img src="https://latex.codecogs.com/svg.image?normalized&space;=&space;{IDF(word_x)_y&space;\over&space;vectorLenth_y}&space;" title="normalized = {IDF(word_x)_y \over vectorLenth_y} " />
+</div>
+
 Donde **x** representa el id de la palabra y **y** el documento asociado.
 
 ```c++
@@ -206,7 +214,9 @@ vector<vector<double>> normalizeVector(vector<vector<double>> idf, vector<double
 Una vez se han realizado estos cálculos, se procede a realizar la operación necesaria para hallar la similitud entre cada par de documentos introducidos. Para ello, se hace uso de la funcion **cosineValues**, que dado la matriz normalizada y el conjunto de palabras, calculará la similtud de términos.
 La fórmula que representa el código es la siguiente: 
 
-> $$ cos(A1, A2) = { wordA1_1 * wordA2_1 + wordA1_2 * wordA2_2 + ... + wordA1_n * wordA2_n} $$
+<div class = "img-container">
+<img src="https://latex.codecogs.com/svg.image?cos(A1,&space;A2)&space;=&space;{&space;wordA1_1&space;*&space;wordA2_1&space;&plus;&space;wordA1_2&space;*&space;wordA2_2&space;&plus;&space;...&space;&plus;&space;wordA1_n&space;*&space;wordA2_n}&space;&space;" title="cos(A1, A2) = { wordA1_1 * wordA2_1 + wordA1_2 * wordA2_2 + ... + wordA1_n * wordA2_n} " />
+</div>
 
 Donde se realiza la multiplicación del término IDF de las palabras que son iguales de entre ambos documentos. Es decir, en la fórmula, wordA1_1 y wordA2_1 representan el IDF de la misma palabra en los diferentes documentos.
 
@@ -240,3 +250,9 @@ void cosineValues(vector<vector<double>> normalizedMatrix, unsigned int size, ve
 Como se puede observar, se realiza una comprobación de que ambas palabras sean la misma y si y sólo si eso se cumple, se realiza la operación de IDF asociada a esa palabra en cada documento. 
 
 El resto de funciones que se encuentran en el código son pequeñas funcionalidades que tienen como objetivo mejorar el programa para se ejecute de forma óptima y correcta, pero se considera que su explicación queda lo suficientemente detallada en los propios comentarios que las describen en el programa main.cpp situado dentro del directorio /src.
+
+<style>
+    .img-container {
+        text-align: center;
+    }
+</style>
